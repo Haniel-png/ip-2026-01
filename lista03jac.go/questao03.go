@@ -1,7 +1,7 @@
 package main
 import "fmt"
 func main() {
-  const numNotas int = 10 
+  const numNotas int = 10
   var (
 	nota [numNotas]float64 
   )
