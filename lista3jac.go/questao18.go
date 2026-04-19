@@ -1,0 +1,19 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Print("Diagonal da matriz\n")
+	for i:= 0; i<10; i++ {
+		for j := 0; j<10; j++ {
+		if i==j {
+			fmt.Printf("[%d,%d]", i, j)
+		} else {
+			fmt.Print("[0,0]")
+		}
+	}
+	fmt.Println()
+}
+}
