@@ -6,16 +6,12 @@ func main() {
 	nota [numNotas]float64 
 	soma float64 = 0
 	  )
-	  fmt.Printf("Informe a nota 1: ")
-	  fmt.Scan(&nota[0]) 
-	  fmt.Printf("Informe a nota 2: ")
-	  fmt.Scan(&nota[1]) 
-	  fmt.Printf("Informe a nota 3: ")
-	  fmt.Scan(&nota[2])
-	  fmt.Printf("Informe a nota 4: ")
-	  fmt.Scan(&nota[3])
-	  fmt.Printf("Informe a nota 5: ")
-	  fmt.Scan(&nota[4])
-	soma = nota[0] + nota[1] + nota[2] + nota[3] + nota[4]	
+	for i := 0; i < numNotas; i++ {
+	  fmt.Printf("Informe a nota %d: ", i+1)
+	  fmt.Scan(&nota[i]) 
+	}
+	for i := 0; i < numNotas; i++ {
+		soma = soma + nota[i]
+	}
 	fmt.Printf("A média é: %f\n ", soma/float64(numNotas))
 }
