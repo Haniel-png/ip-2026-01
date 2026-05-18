@@ -20,21 +20,6 @@ func main() {
 	// Define a rota raiz ("/") para servir os arquivos estáticos
 	http.Handle("/", fileserver)
 
-	// Define a rota "/hello" e associa ao handler HelloHandler
-	http.HandleFunc("/hello", handlers.HelloHandler)
-
-	// Define a rota "/form" e associa ao handler FormHandler
-	http.HandleFunc("/form", handlers.FormHandler)
-
-	// Define a rota "/login" e associa ao handler LoginHandler
-	http.HandleFunc("/login", handlers.LoginHandler)
-
-	// Define a rota "/updateAccount" e associa ao handler UpdateAccountHandler
-	http.HandleFunc("/updateAccount", handlers.UpdateAccountHandler)
-
-	// Define a rota "/deleteAccount" e associa ao handler DeleteAccountHandler
-	http.HandleFunc("/deleteAccount", handlers.DeleteAccountHandler)
-
 	// --- Rotas para a gestão de Pacientes (CRUD) ---
 	// Create
 	http.HandleFunc("/createPatient", handlers.CreatePatientHandler)
