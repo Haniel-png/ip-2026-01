@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Paciente - Servidor HTTP</title>
+    <link rel="stylesheet" href="../styles/createPatient.style.css">
+</head>
+
+<body>
+    <div id="container">
+        <h3>Cadastrar Novo Paciente</h3>
+        <form method="POST" action="/createPatient" id="createPatientForm">
+            <div>
+                <label>Nome Completo:</label>
+                <input name="fullName" id="fullNameInput" placeholder="Digite o nome completo" value="" type="text" required>
+                <span class="error-message" id="fullNameError"></span>
+            </div>
+            
+            <div>
+                <label>CPF / Documento:</label>
+                <input name="cpf" id="cpfInput" placeholder="Digite o CPF (000.000.000-00)" value="" type="text" required>
+                <span class="error-message" id="cpfError"></span>
+            </div>
+
+            <div>
+                <label>Data de Nascimento:</label>
+                <input name="birthDate" id="birthDateInput" value="" type="date" required>
+                <span class="error-message" id="birthDateError"></span>
+            </div>
+
+            <div>
+                <label>Tipo Sanguíneo:</label>
+                <select name="bloodType" id="bloodTypeSelect" required>
+                    <option value="">Selecione...</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+                <span class="error-message" id="bloodTypeError"></span>
+            </div>
+
+            <div>
+                <label>Telefone de Contato:</label>
+                <input name="phone" id="phoneInput" placeholder="Digite o telefone (11) 99999-9999" value="" type="tel" required>
+                <span class="error-message" id="phoneError"></span>
+            </div>
+
+            <div class="textarea-wrapper">
+                <label>Histórico Médico:</label>
+                <textarea name="medicalHistory" id="medicalHistoryTextarea" placeholder="Digite o histórico médico do paciente..." required></textarea>
+                <span class="error-message" id="medicalHistoryError"></span>
+            </div>
+
+            <button type="submit"><span>Cadastrar Paciente</span></button>
+        </form>
+    </div>
+
+    <script>
+        // Validação de CPF
+        function validateCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            return cpf.length === 11;
+        }
+
+        // Validação de Telefone
+        function validatePhone(phone) {
+            phone = phone.replace(/\D/g, '');
+            return phone.length >= 10 && phone.length <= 11;
+        }
+
+        // Validação de Nome
+        function validateFullName(fullName) {
+            return fullName.trim().length >= 3;
+        }
+
+        // Event listeners para validação em tempo real
+        document.getElementById('fullNameInput').addEventListener('blur', function() {
+            const error = document.getElementById('fullNameError');
+            if (!validateFullName(this.value)) {
+                error.textContent = 'Nome deve ter pelo menos 3 caracteres';
+                this.classList.add('input-error');
+            } else {
+                error.textContent = '';
+                this.classList.remove('input-error');
+            }
+        });
+
+        document.getElementById('cpfInput').addEventListener('blur', function() {
+            const error = document.getElementById('cpfError');
+            if (!validateCPF(this.value)) {
+                error.textContent = 'CPF inválido';
+                this.classList.add('input-error');
+            } else {
+                error.textContent = '';
+                this.classList.remove('input-error');
+            }
+        });
+
+        document.getElementById('phoneInput').addEventListener('blur', function() {
+            const error = document.getElementById('phoneError');
+            if (!validatePhone(this.value)) {
+                error.textContent = 'Telefone inválido';
+                this.classList.add('input-error');
+            } else {
+                error.textContent = '';
+                this.classList.remove('input-error');
+            }
+        });
+
+        // Validação do formulário ao enviar
+        document.getElementById('createPatientForm').addEventListener('submit', function(e) {
+            let isValid = true;
+
+            if (!validateFullName(document.getElementById('fullNameInput').value)) {
+                document.getElementById('fullNameError').textContent = 'Nome inválido';
+                document.getElementById('fullNameInput').classList.add('input-error');
+                isValid = false;
+            }
+
+            if (!validateCPF(document.getElementById('cpfInput').value)) {
+                document.getElementById('cpfError').textContent = 'CPF inválido';
+                document.getElementById('cpfInput').classList.add('input-error');
+                isValid = false;
+            }
+
+            if (!validatePhone(document.getElementById('phoneInput').value)) {
+                document.getElementById('phoneError').textContent = 'Telefone inválido';
+                document.getElementById('phoneInput').classList.add('input-error');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+
+</html>

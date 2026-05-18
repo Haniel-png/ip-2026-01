@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Pacientes - Servidor HTTP</title>
+    <link rel="stylesheet" href="../styles/listPatients.style.css">
+</head>
+
+<body>
+    <div id="container">
+        <h3>Pacientes Cadastrados</h3>
+        
+        <div class="actions-header">
+            <a href="/forms/createPatient.html" class="btn-create">+ Novo Paciente</a>
+        </div>
+
+        <div id="patientsContainer" class="patients-container">
+            <table id="patientsTable" class="patients-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>Tipo Sanguíneo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="patientsList">
+                    <!-- Pacientes serão carregados aqui -->
+                </tbody>
+            </table>
+            <div id="emptyMessage" class="empty-message" style="display: none;">
+                <p>Nenhum paciente cadastrado</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Carregar lista de pacientes
+        function loadPatients() {
+            fetch('/listPatients')
+                .then(response => response.json())
+                .then(patients => {
+                    const tbody = document.getElementById('patientsList');
+                    const emptyMsg = document.getElementById('emptyMessage');
+                    
+                    if (!patients || patients.length === 0) {
+                        tbody.innerHTML = '';
+                        emptyMsg.style.display = 'block';
+                        return;
+                    }
+                    
+                    emptyMsg.style.display = 'none';
+                    tbody.innerHTML = patients.map(patient => `
+                        <tr>
+                            <td>${patient.fullName || '-'}</td>
+                            <td>${patient.cpf || '-'}</td>
+                            <td>${patient.phone || '-'}</td>
+                            <td>${patient.bloodType || '-'}</td>
+                            <td class="actions-cell">
+                                <a href="/forms/updatePatient.html?id=${patient.id}" class="btn-edit" title="Editar">✎ Editar</a>
+                                <button class="btn-delete" onclick="deletePatient(${patient.id})" title="Excluir">✕ Excluir</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar pacientes:', error);
+                    document.getElementById('emptyMessage').style.display = 'block';
+                    document.getElementById('emptyMessage').innerHTML = '<p>Erro ao carregar pacientes</p>';
+                });
+        }
+
+        // Excluir paciente
+        function deletePatient(patientId) {
+            if (!confirm('Tem certeza que deseja excluir este paciente?')) {
+                return;
+            }
+
+            fetch(`/deletePatient`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: patientId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Paciente excluído com sucesso');
+                    loadPatients();
+                } else {
+                    alert('Erro ao excluir paciente');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao excluir paciente:', error);
+                alert('Erro ao excluir paciente');
+            });
+        }
+
+        // Carregar pacientes ao abrir a página
+        loadPatients();
+    </script>
+</body>
+
+</html>
